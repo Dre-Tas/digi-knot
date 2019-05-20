@@ -3,6 +3,8 @@ using System;
 using System.Windows.Media.Imaging;
 using System.Reflection;
 using Autodesk.Revit.UI;
+using System.Data.SqlClient;
+using System.Collections.Generic;
 #endregion
 
 namespace DigiKnot
@@ -48,5 +50,27 @@ namespace DigiKnot
         {
             return Result.Succeeded;
         }
+
+        #region WIP
+        //void Application_DocumentSaving(object sender,
+        //    Autodesk.Revit.DB.Events.DocumentSavingEventArgs e)
+        //{
+        //    SqlConnection connection = ViewModel.DbConnection.DbConnect();
+
+        //    connection.Open();
+
+        //    string selectSql = "select Asset_ID from [Table]";
+
+        //    // Write each element in model to db
+        //    using (SqlCommand cmd = new SqlCommand(selectSql, connection))
+        //    {
+        //        List<string> read = new List<string>();
+        //        var reader = cmd.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            read.Add(reader.GetString(0));
+        //        }
+        //    }
+        #endregion
     }
 }

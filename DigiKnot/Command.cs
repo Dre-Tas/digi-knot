@@ -22,6 +22,9 @@ namespace DigiKnot
             Autodesk.Revit.ApplicationServices.Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
+            Views.Connect dbConnect = new Views.Connect();
+            dbConnect.ShowDialog();
+
             // Get all NON built in parameters
             FilteredElementCollector paramColl = new FilteredElementCollector(doc)
                 .WhereElementIsNotElementType()
@@ -44,47 +47,35 @@ namespace DigiKnot
                 .WhereElementIsNotElementType()
                 .WherePasses(filter2);
 
-            // Write all these elements to db
-            string connString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\atassera\source\repos\DigiKnot\DigiKnot\Assets.mdf;Integrated Security=True";
-            SqlConnection connection = new SqlConnection(connString);
+            SqlConnection connection = ViewModel.DbConnection.DbConnect();
 
             connection.Open();
 
             foreach (Element e in col)
             {
-                string guid = e.UniqueId;
-                //MessageBox.Show(uid);
+                // Get info to write
                 string assetId = e.LookupParameter("Asset ID").AsString();
-                //MessageBox.Show(assetId);
+                string guid = e.UniqueId;
 
+                // Define sql
                 string sql = "insert into [Table]" +
                     " (Asset_ID, GUID)" +
                     " values(@assetId, @guid)";
+                // Write each element in model to db
                 using (SqlCommand cmd = new SqlCommand(sql, connection))
                 {
                     cmd.Parameters.AddWithValue("@assetId", assetId);
                     cmd.Parameters.AddWithValue("@guid", guid);
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show("Row inserted !! ");
                 }
             }
 
-            MessageBox.Show("Done! :)");
+            // Notify user
+            MessageBox.Show("You are connected :)");
 
-            //// Modify document within a transaction
-
-            //using (Transaction tx = new Transaction(doc))
-            //{
-            //    tx.Start("Transaction Name");
-            //    tx.Commit();
-            //}
-
+            // Return success
             return Result.Succeeded;
         }
-
-        internal const string assetSql = "insert into Table (Asset_ID, GUID) values (@assetId, @guid);"
-            //+ "SELECT SCOPE_IDENTITY()"
-            ;
     }
 
     class Asset
