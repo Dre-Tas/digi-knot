@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command DigiKnot</Text>
+    <Description>Some description for DigiKnot</Description>
+    <Assembly>DigiKnot.dll</Assembly>
+    <FullClassName>DigiKnot.Command</FullClassName>
+    <ClientId>19bb3153-517d-446c-ad17-679a84e58d4c</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application DigiKnot</Name>
+    <Assembly>DigiKnot.dll</Assembly>
+    <FullClassName>DigiKnot.App</FullClassName>
+    <ClientId>f0df9802-0c6f-44ee-ac8f-cb59c5af7722</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
