@@ -2,6 +2,7 @@
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Forms;
 #endregion
@@ -44,14 +45,31 @@ namespace DigiKnot
                 .WherePasses(filter2);
 
             // Write all these elements to db
+            string connString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\atassera\source\repos\DigiKnot\DigiKnot\Assets.mdf;Integrated Security=True";
+            SqlConnection connection = new SqlConnection(connString);
+
+            connection.Open();
 
             foreach (Element e in col)
             {
-                string uid = e.UniqueId;
-                MessageBox.Show(uid);
+                string guid = e.UniqueId;
+                //MessageBox.Show(uid);
                 string assetId = e.LookupParameter("Asset ID").AsString();
-                MessageBox.Show(assetId);
+                //MessageBox.Show(assetId);
+
+                string sql = "insert into [Table]" +
+                    " (Asset_ID, GUID)" +
+                    " values(@assetId, @guid)";
+                using (SqlCommand cmd = new SqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@assetId", assetId);
+                    cmd.Parameters.AddWithValue("@guid", guid);
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Row inserted !! ");
+                }
             }
+
+            MessageBox.Show("Done! :)");
 
             //// Modify document within a transaction
 
@@ -62,6 +80,22 @@ namespace DigiKnot
             //}
 
             return Result.Succeeded;
+        }
+
+        internal const string assetSql = "insert into Table (Asset_ID, GUID) values (@assetId, @guid);"
+            //+ "SELECT SCOPE_IDENTITY()"
+            ;
+    }
+
+    class Asset
+    {
+        public string Asset_ID { get; set; }
+        public string GUID { get; set; }
+
+        public Asset(string assetId, string guid)
+        {
+            Asset_ID = assetId;
+            GUID = guid;
         }
     }
 }
