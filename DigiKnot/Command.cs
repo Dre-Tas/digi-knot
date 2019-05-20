@@ -47,7 +47,10 @@ namespace DigiKnot
 
             foreach (Element e in col)
             {
-                //Debug.Print(e.Name);
+                string uid = e.UniqueId;
+                MessageBox.Show(uid);
+                string assetId = e.LookupParameter("Asset ID").AsString();
+                MessageBox.Show(assetId);
             }
 
             //// Modify document within a transaction
