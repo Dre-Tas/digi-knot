@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Forms;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
@@ -21,35 +22,37 @@ namespace DigiKnot
         {
             UIApplication uiapp = commandData.Application;
             UIDocument uidoc = uiapp.ActiveUIDocument;
-            Application app = uiapp.Application;
+            Autodesk.Revit.ApplicationServices.Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            // Access current selection
+            MessageBox.Show("Oi!");
 
-            Selection sel = uidoc.Selection;
+            //// Access current selection
 
-            // Retrieve elements from database
+            //Selection sel = uidoc.Selection;
 
-            FilteredElementCollector col
-              = new FilteredElementCollector(doc)
-                .WhereElementIsNotElementType()
-                .OfCategory(BuiltInCategory.INVALID)
-                .OfClass(typeof(Wall));
+            //// Retrieve elements from database
 
-            // Filtered element collector is iterable
+            //FilteredElementCollector col
+            //  = new FilteredElementCollector(doc)
+            //    .WhereElementIsNotElementType()
+            //    .OfCategory(BuiltInCategory.INVALID)
+            //    .OfClass(typeof(Wall));
 
-            foreach (Element e in col)
-            {
-                Debug.Print(e.Name);
-            }
+            //// Filtered element collector is iterable
 
-            // Modify document within a transaction
+            //foreach (Element e in col)
+            //{
+            //    Debug.Print(e.Name);
+            //}
 
-            using (Transaction tx = new Transaction(doc))
-            {
-                tx.Start("Transaction Name");
-                tx.Commit();
-            }
+            //// Modify document within a transaction
+
+            //using (Transaction tx = new Transaction(doc))
+            //{
+            //    tx.Start("Transaction Name");
+            //    tx.Commit();
+            //}
 
             return Result.Succeeded;
         }
