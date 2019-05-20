@@ -1,13 +1,9 @@
 #region Namespaces
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows.Forms;
-using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Selection;
+using System.Linq;
+using System.Windows.Forms;
 #endregion
 
 namespace DigiKnot
@@ -25,26 +21,34 @@ namespace DigiKnot
             Autodesk.Revit.ApplicationServices.Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-            MessageBox.Show("Oi!");
+            // Get all NON built in parameters
+            FilteredElementCollector paramColl = new FilteredElementCollector(doc)
+                .WhereElementIsNotElementType()
+                .OfCategory(BuiltInCategory.INVALID);
 
-            //// Access current selection
+            // Get the Asset ID parameter
+            Element param = paramColl
+                .Where(p => p.Name == "Asset ID")
+                .FirstOrDefault();
 
-            //Selection sel = uidoc.Selection;
+            // Create filter rule based on Asset ID parameter
+            ParameterValueProvider pvp = new ParameterValueProvider(param.Id);
+            FilterStringRuleEvaluator fsre = new FilterStringEquals();
+            // Get only elements that have the Asset ID parameter different from the empty string
+            FilterRule fRule2 = new FilterStringRule(pvp, fsre, "", false);
+            ElementParameterFilter filter2 = new ElementParameterFilter(fRule2, true);
 
-            //// Retrieve elements from database
+            // Filter elements in model by the parameter
+            FilteredElementCollector col = new FilteredElementCollector(doc)
+                .WhereElementIsNotElementType()
+                .WherePasses(filter2);
 
-            //FilteredElementCollector col
-            //  = new FilteredElementCollector(doc)
-            //    .WhereElementIsNotElementType()
-            //    .OfCategory(BuiltInCategory.INVALID)
-            //    .OfClass(typeof(Wall));
+            // Write all these elements to db
 
-            //// Filtered element collector is iterable
-
-            //foreach (Element e in col)
-            //{
-            //    Debug.Print(e.Name);
-            //}
+            foreach (Element e in col)
+            {
+                //Debug.Print(e.Name);
+            }
 
             //// Modify document within a transaction
 
