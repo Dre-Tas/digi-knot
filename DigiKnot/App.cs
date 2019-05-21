@@ -37,6 +37,19 @@ namespace DigiKnot
             BitmapImage pbImage = new BitmapImage(new Uri
                 ("pack://application:,,,/DigiKnot;component/Resources/connect.png"));
             pb.LargeImage = pbImage;
+
+            // create push button for ModelAudit
+            PushButtonData bData2 = new PushButtonData(
+                "cmddigKnotShow",
+                "Show Data",
+                thisAssemblyPath,
+                "DigiKnot.ViewModel.ShowData");
+
+            PushButton pb2 = digiKnotPanel.AddItem(bData2) as PushButton;
+            pb2.ToolTip = "...";
+            BitmapImage pbImage2 = new BitmapImage(new Uri
+                ("pack://application:,,,/DigiKnot;component/Resources/compass.png"));
+            pb2.LargeImage = pbImage2;
         }
 
         public Result OnStartup(UIControlledApplication application)
